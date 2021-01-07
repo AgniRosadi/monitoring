@@ -95,7 +95,6 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Siklus</th>
                                     <th>Kode Kolam</th>
                                     <th>Luas Kolam(m2)</th>
                                     <th>Tanggal Tebar</th>
@@ -110,7 +109,6 @@
                                 <?php foreach ($kolamnya as $ko) : ?>
                                     <tr>
                                         <th scope="row"><?= $i; ?></th>
-                                        <td><?= $ko['siklus']; ?></td>
                                         <td><?= $ko['kode_kolam']; ?></td>
                                         <td><?= $ko['luas_kolam']; ?></td>
                                         <td><?= $ko['tanggal']; ?></td>

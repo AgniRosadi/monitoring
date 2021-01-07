@@ -41,6 +41,8 @@
                                         <th>Tanggal</th>
                                         <th>Kode Kolam</th>
                                         <th>No Parsial</th>
+                                        <th>No Data Parsial</th>
+                                        <th>No Kolam</th>
                                         <th>Hari</th>
                                         <th>Mbw (gram)</th>
                                         <th>Size (Ekor/Kg)</th>
@@ -59,8 +61,9 @@
                                     <?php foreach ($parsialnya as $p) : ?>
                                         <tr>
                                             <td><?= $p['tanggal']; ?></td>
-                                            <td><?= $p['kode_kolam']; ?></td>
-                                            <td><?= $p['no_parsial']; ?></td>
+                                            <td><?= $p['id_data_parsial']; ?></td>
+                                            <td><?= $p['id_parsial']; ?></td>
+                                            <td><?= $p['id_kolam']; ?></td>
                                             <td><?= $p['hari']; ?></td>
                                             <td><?= $p['mbw']; ?></td>
                                             <td><?= $p['size']; ?></td>

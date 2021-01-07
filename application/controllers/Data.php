@@ -382,35 +382,62 @@ class data extends CI_Controller
         $this->form_validation->set_rules('pemasukan', 'Pemasukan', 'required|trim');
         $this->form_validation->set_rules('total', 'Total', 'required|trim');
 
-        if ($this->form_validation->run() == false) {
-            $this->load->view('templates/header', $data);
-            $this->load->view('templates/sidebar', $data);
-            $this->load->view('templates/topbar', $data);
-            $this->load->view('data/parsial/t_parsial', $data);
-            $this->load->view('templates/footer');
+
+        $this->load->view('templates/header', $data);
+        $this->load->view('templates/sidebar', $data);
+        $this->load->view('templates/topbar', $data);
+        $this->load->view('data/parsial/t_parsial', $data);
+        $this->load->view('templates/footer');
+    }
+    public function tambah_parsial()
+    {
+
+        $id_kolam = $this->input->post('kode_kolam');
+        $query1 = $this->db->query("SELECT id_siklus from data_parsial where id_kolam = $id_kolam order by id_siklus desc limit 1");
+        $query7 =  $this->db->query("SELECT id_siklus from data_parsial where id_kolam = $id_kolam order by id_siklus desc limit 1")->row_array();
+        if ($query1->num_rows() == 1) {
+
+            $urut = $query7['id_siklus'];
         } else {
 
-            $data = [
-                'no_parsial' => $this->input->post('no_parsial', true),
-                'kode_kolam' => $this->input->post('kode_kolam', true),
-                'tanggal' => $this->input->post('tanggal', true),
-                'hari' => $this->input->post('hari', true),
-                'mbw' => $this->input->post('mbw', true),
-                'size' => $this->input->post('size', true),
-                'biomasa' => $this->input->post('biomasa', true),
-                'populasi' => $this->input->post('populasi', true),
-                'parsial' => $this->input->post('parsial', true),
-                'sisa_p' => $this->input->post('sisa_p', true),
-                'pemasukan' => $this->input->post('pemasukan', true),
-                'total' => $this->input->post('total', true)
-            ];
-            $this->db->insert('data_parsial', $data);
+            $urut = 1;
+        }
+        $query2 = $this->db->query("SELECT * FROM data_parsial d join parsial p on p.id_parsial = d.id_parsial join data_kolam k on k.id_kolam = d.id_kolam where d.id_kolam = $id_kolam and d.id_siklus = $urut")->num_rows();
 
+        if ($query2 <= 5) {
+
+            $id_siklus = $urut;
+            var_dump($id_siklus);
+        } else {
+            $id_siklus = $urut + 1;
+        }
+
+        $data['id_kolam'] = $this->input->post('kode_kolam');
+        $data['id_siklus'] = $id_siklus;
+        $data['id_parsial'] = $this->input->post('no_parsial');
+        $data['tanggal'] = $this->input->post('tanggal');
+        $data['hari'] = $this->input->post('hari');
+        $data['mbw'] = $this->input->post('mbw');
+        $data['size'] = $this->input->post('size');
+        $data['biomasa'] = $this->input->post('biomasa');
+        $data['populasi'] = $this->input->post('populasi');
+        $data['parsial'] = $this->input->post('parsial');
+        $data['sisa_p'] = $this->input->post('sisa_p');
+        $data['pemasukan'] = $this->input->post('pemasukan');
+        $data['total'] = $this->input->post('total');
+
+        $query4 = $this->db->insert('data_parsial', $data);
+        if ($query4) {
             $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
-                Data berhasil di tambahkan! </div>');
+        Data berhasil di tambahkan! </div>');
+            redirect('data/parsial');
+        } else {
+            $this->session->set_flashdata('message', '<div class="alert alert-error" role="alert">
+        Data gagal ditambahkan! </div>');
             redirect('data/parsial');
         }
     }
+
     public function u_parsial($parsial_id)
     {
         $data['title'] = 'Update Data Parsial';

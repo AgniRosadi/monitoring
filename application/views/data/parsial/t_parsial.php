@@ -7,25 +7,24 @@
 
 		<?= $this->session->flashdata('message'); ?>
 
-		<form action="<?= base_url('data/t_parsial'); ?>" method="post">
+		<form action="<?= base_url('data/tambah_parsial'); ?>" method="post">
 			<!-- Card Header - Accordion -->
 			<a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
 				<h6 class="m-0 font-weight-bold text-primary">Tambah Data parsial</h6>
 			</a>
 			<!-- Card Content - Collapse -->
+			<?php $query = $this->db->query("SELECT * FROM parsial")->result(); ?>
 			<div class="collapse show" id="collapseCardExample">
 				<div class="card-body">
 					<div class="form-row">
 						<div class="form-group col-md-6">
 							<label>No_Parsial</label>
 							<select id="no_parsial" name="no_parsial" class="form-control">
-								<option value="">-Pilih parsial-</option>
-								<option value="parsial1">parsial1</option>
-								<option value="parsial2">parsial2</option>
-								<option value="parsial3">parsial3</option>
-								<option value="parsial4">parsial4</option>
-								<option value="parsial5">parsial5</option>
-								<option value="panen">panen</option>
+								<?php foreach ($query as $qr) :
+
+								?>
+									<option value="<?php echo $qr->id_parsial ?>"><?php echo $qr->nama_parsial ?></option>
+								<?php endforeach ?>
 							</select>
 						</div>
 						<div class="form-group col-md-6">
@@ -34,7 +33,7 @@
 								<option value="">-Pilih-</option>
 								<?php foreach ($kolam as $a) : ?>
 
-									<option value="<?= $a['kode_kolam']; ?>"><?= $a['kode_kolam']; ?>
+									<option value="<?= $a['id_kolam']; ?>"><?= $a['kode_kolam']; ?>
 
 									</option>
 								<?php endforeach ?>
