@@ -19,6 +19,18 @@ class data_model extends CI_Model
         $this->db->limit($limit, $start);
         return $this->db->get($this->table)->result();
     }
+
+    function get_parsial($id)
+    {
+        $dd = '';
+        $query2 = $this->db->query("SELECT * from parsial where id_parsial = $id")->result();
+        foreach ($query2 as $qr) {
+            $id_parsial = $qr->id_parsial;
+            $nama_parsial = $qr->nama_parsial;
+            $dd .= ' <option value="' . $id_parsial . '">' . $nama_parsial . '</option>';
+        }
+        return $dd;
+    }
     function tampil_data()
     {
         $this->db->select('*');

@@ -19,7 +19,7 @@
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="newRoleModalLabel">Tambah Data Kolam</h5>
+                                            <h5 class="modal-title" id="newRoleModalLabel">Tambah Data Teknisi</h5>
                                         </div>
 
 

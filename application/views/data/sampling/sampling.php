@@ -47,7 +47,7 @@
                                 <tbody>
                                     <?php foreach ($sampling as $s) : ?>
                                         <tr>
-                                            <td><?= $s['tanggal_s']; ?></td>
+                                            <td><?= date('d-m-y', strtotime($s['tanggal_s'])); ?></td>
                                             <td><?= $s['kode_kolam']; ?></td>
                                             <td><?= $s['umur_u']; ?></td>
                                             <td><?= $s['mbw']; ?></td>

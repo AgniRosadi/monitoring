@@ -20,11 +20,7 @@
 						<div class="form-group col-md-6">
 							<label>No_Parsial</label>
 							<select id="no_parsial" name="no_parsial" class="form-control">
-								<?php foreach ($query as $qr) :
-
-								?>
-									<option value="<?php echo $qr->id_parsial ?>"><?php echo $qr->nama_parsial ?></option>
-								<?php endforeach ?>
+								<option>--pilih parsial---</option>
 							</select>
 						</div>
 						<div class="form-group col-md-6">

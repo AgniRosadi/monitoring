@@ -41,8 +41,6 @@
                                         <th>Tanggal</th>
                                         <th>Kode Kolam</th>
                                         <th>No Parsial</th>
-                                        <th>No Data Parsial</th>
-                                        <th>No Kolam</th>
                                         <th>Hari</th>
                                         <th>Mbw (gram)</th>
                                         <th>Size (Ekor/Kg)</th>
@@ -50,20 +48,18 @@
                                         <th>Populasi (Ekor)</th>
                                         <th>Parsial (%)</th>
                                         <th>Sisa Populasi</th>
-                                        <th>Pemasukan</th>
-                                        <th>Total</th>
+
                                         <th>Action</th>
 
                                     </tr>
                                 </thead>
                                 <tbody>
-
-                                    <?php foreach ($parsialnya as $p) : ?>
+                                    <?php $a = $this->db->query("SELECT * from data_kolam d join data_parsial p on p.id_kolam = d.id_kolam")->result_array(); ?>
+                                    <?php foreach ($a as $p) : ?>
                                         <tr>
-                                            <td><?= $p['tanggal']; ?></td>
-                                            <td><?= $p['id_data_parsial']; ?></td>
+                                            <td><?= date('d-m-y', strtotime($p['tanggal'])); ?></td>
+                                            <td><?= $p['kode_kolam']; ?></td>
                                             <td><?= $p['id_parsial']; ?></td>
-                                            <td><?= $p['id_kolam']; ?></td>
                                             <td><?= $p['hari']; ?></td>
                                             <td><?= $p['mbw']; ?></td>
                                             <td><?= $p['size']; ?></td>
@@ -71,8 +67,7 @@
                                             <td><?= $p['populasi']; ?></td>
                                             <td><?= $p['parsial']; ?></td>
                                             <td><?= $p['sisa_p']; ?></td>
-                                            <td><?= $p['pemasukan']; ?></td>
-                                            <td><?= $p['total']; ?></td>
+
                                             <td> <a href="<?= base_url('data/u_parsial/') . $p['id_parsial'];  ?>" class="badge badge-success">edit</a>
                                                 <a href="<?= base_url('data/d_parsial/') . $p['id_parsial'];  ?>" class="badge badge-danger" data-confirm="Anda yakin akan menghapus data ini?">delete</a>
                                             </td>

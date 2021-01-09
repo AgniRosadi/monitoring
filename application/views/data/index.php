@@ -60,7 +60,7 @@
                                     <?php foreach ($airnya as $ai) : ?>
                                         <tr>
 
-                                            <td><?= $ai['tanggal']; ?></td>
+                                            <td><?= date('d-m-y', strtotime($ai['tanggal'])); ?></td>
                                             <td><?= $ai['kode_kolam']; ?></td>
                                             <td><?= $ai['suhu']; ?></td>
                                             <td><?= $ai['salinitas']; ?></td>

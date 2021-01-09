@@ -146,9 +146,8 @@ class data extends CI_Controller
         $data['title'] = 'Kelola Data Kolam';
         $data['user'] = $this->db->get_where('user', ['email' =>
         $this->session->userdata('email')])->row_array();
-        $data['kolamnya'] = $this->db->get_where('data_kolam')->result_array();
+        $data['kolamnya'] = $this->db->get_where('data_kolam')->result();
 
-        $this->form_validation->set_rules('siklus', 'Siklus', 'required|trim');
         $this->form_validation->set_rules('kode_kolam', 'Kode Kolam', 'required|trim');
         $this->form_validation->set_rules('luas_kolam', 'Luas Kolam', 'required|trim');
         $this->form_validation->set_rules('tanggal', 'Tanggal Tebar', 'required|trim');
@@ -163,21 +162,26 @@ class data extends CI_Controller
             $this->load->view('data/kolam/kolam', $data);
             $this->load->view('templates/footer');
         } else {
-
+            $kode_kolam = $this->input->post('kode_kolam');
             $data = [
-                'siklus' => $this->input->post('siklus', true),
                 'kode_kolam' => $this->input->post('kode_kolam', true),
                 'luas_kolam' => $this->input->post('luas_kolam', true),
                 'tanggal' => $this->input->post('tanggal', true),
                 'asal_b' => $this->input->post('asal_b', true),
                 'jumlah_tebar' => $this->input->post('jumlah_tebar', true),
-                'tipe_p' => $this->input->post('tipe_p', true)
+                'tipe_p' => $this->input->post('tipe_p', true),
             ];
-            $this->db->insert('data_kolam', $data);
-
-            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
+            $query1 =   $this->db->query("SELECT * from data_kolam where kode_kolam = '$kode_kolam'")->num_rows();
+            if ($query1 > 0) {
+                $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
+                Data kolam sudah ada! </div>');
+                redirect('data/kolam/kolam', $data);
+            } else {
+                $this->db->insert('data_kolam', $data);
+                $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
                 Data berhasil di tambahkan! </div>');
-            redirect('data/kolam/kolam', $data);
+                redirect('data/kolam/kolam', $data);
+            }
         }
     }
 
@@ -344,6 +348,21 @@ class data extends CI_Controller
         redirect('data/sampling/sampling');
     }
 
+    public function status()
+    {
+
+        $data['title'] = 'Kelola Data Air';
+        $data['user'] = $this->db->get_where('user', ['email' =>
+        $this->session->userdata('email')])->row_array();
+
+        $data['status'] = $this->db->get_where('data_kolam')->result_array();
+
+        $this->load->view('templates/header', $data);
+        $this->load->view('templates/sidebar', $data);
+        $this->load->view('templates/topbar', $data);
+        $this->load->view('data/status/status', $data);
+        $this->load->view('templates/footer', $data);
+    }
 
     public function parsial()
     {
@@ -358,7 +377,6 @@ class data extends CI_Controller
         $this->load->view('data/parsial/parsial');
         $this->load->view('templates/footer');
     }
-
 
     public function t_parsial()
     {
@@ -496,7 +514,26 @@ class data extends CI_Controller
             Data berhasil di hapus </div>');
         redirect('data/parsial/parsial');
     }
+    //parsial
+    public function getParsial()
+    {
+        $id_kolam = $this->input->post('kode_kolam');
 
+        $query1 = $this->db->query("SELECT * FROM data_parsial d join data_kolam k on d.id_kolam = k.id_kolam where k.id_kolam = $id_kolam order by d.id_data_parsial desc limit 1")->row_array();
+
+        if ($query1) {
+            $id_parsial = $query1['id_parsial'];
+
+            if ($id_parsial > 5) {
+                $parsial_selanjutnya = 1;
+            } else {
+                $parsial_selanjutnya = $id_parsial + 1;
+            }
+        } else {
+            $parsial_selanjutnya = 1;
+        }
+        echo $this->data_model->get_parsial($parsial_selanjutnya);
+    }
     //pakan
     public function pakan()
     {
@@ -621,6 +658,8 @@ class data extends CI_Controller
             redirect('user');
         }
     }
+
+
 
     public function changePassword()
     {

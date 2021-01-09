@@ -62,6 +62,28 @@
   <!-- Page level custom scripts -->
 
   <script>
+    $('#kode_kolam').on('change', function() {
+      var kode_kolam = $(this).val();
+
+      if (kode_kolam != '') {
+        $.ajax({
+
+          url: "<?= base_url(); ?>data/getParsial",
+          method: "POST",
+          data: {
+            kode_kolam: kode_kolam
+          },
+
+          success: function(data) {
+            $('#no_parsial').html(data)
+          }
+        })
+      } else {
+        $('#no_parsial').html('<option>--pilih parsial--</option>')
+      }
+
+    })
+
     $('.custom-file-input').on('change', function() {
       let fileName = $(this).val().split('\\').pop();
       $(this).next('.custom-file-label').addClass("selected").html(fileName);
@@ -310,7 +332,6 @@
         }
       })
     });
-
   </script>
 
   </body>
