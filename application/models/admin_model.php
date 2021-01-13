@@ -7,7 +7,7 @@ class admin_model extends CI_Model
 {
 	public function getAdmin()
 	{
-		$sql = "SELECT pemasukan, no_parsial from data_parsial";
+		$sql = "SELECT pemasukan, id_parsial from data_parsial";
 		return $this->db->query($sql)->result();
 	}
 }

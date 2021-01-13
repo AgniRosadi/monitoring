@@ -26,15 +26,17 @@
 						<div class="form-group col-md-6">
 							<label>Kode Kolam</label>
 							<select id="kode_kolam" name="kode_kolam" class="form-control">
-								<option value="">-Pilih-</option>
-								<?php foreach ($kolam as $a) : ?>
+								<?php
+								$query1 = $this->db->query("SELECT * FROM kolam where status_kolam = 'dipakai'")->result();
+								foreach ($query1 as $k) { ?>
 
-									<option value="<?= $a['id_kolam']; ?>"><?= $a['kode_kolam']; ?>
-
-									</option>
-								<?php endforeach ?>
+									<option><?php echo $k->kode_kolam  ?></option>
+								<?php
+								} ?>
 							</select>
 						</div>
+					</div>
+					<div class="form-row">
 						<div class="form-group col-md-6">
 							<label>Tanggal</label>
 							<input type="date" class="form-control" id="tanggal" name="tanggal">
@@ -83,21 +85,13 @@
 						</div>
 					</div>
 					<div class="form-row">
-						<div class="form-group col-md-6">
+						<div class="form-group col-md-12">
 							<label>Pemasukan (Rp)</label>
 							<input type="number" min="1" class="form-control" id="pemasukan" name="pemasukan">
 							<?= form_error('pemasukan', '<small class="text-danger pl-3">', '</small>'); ?>
 						</div>
-
-						<div class="form-group col-md-6">
-							<label>Total (Rp)</label>
-							<input type="number" min="1" class="form-control" id="total" name="total">
-							<?= form_error('total', '<small class="text-danger pl-3">', '</small>'); ?>
-						</div>
 					</div>
 				</div>
-
-
 				<div class="card-footer">
 					<button type="submit" class="btn btn-primary">Simpan</button>
 				</div>

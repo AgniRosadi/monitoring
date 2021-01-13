@@ -332,6 +332,23 @@
         }
       })
     });
+    // $('#kode_kolam1').change(function() {
+    //   var kode_kolam = $("#kode_kolam1").val();
+
+    //   $.ajax({
+
+    //     url: "<?php echo base_url('data/kolam_aja') ?>",
+    //     method: "post",
+    //     data: {
+    //       kode_kolam: kode_kolam
+    //     },
+
+    //     success: function(data) {
+
+    //       $('#k').html(data)
+    //     }
+    //   })
+    // });
   </script>
 
   </body>

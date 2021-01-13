@@ -35,13 +35,21 @@ class data_model extends CI_Model
     {
         $this->db->select('*');
         $this->db->from('data_parsial');
-        $this->db->order_by("kode_kolam", "desc");
+        $this->db->order_by("id_kolam", "desc");
+        $query = $this->db->get()->result();
+        return $query;
+    }
+    function tampil_data1()
+    {
+        $this->db->select('*');
+        $this->db->from('data_sampling');
+        $this->db->order_by("id_sampling", "desc");
         $query = $this->db->get()->result();
         return $query;
     }
     public function getGrafik()
     {
-        $sql = "SELECT size, kode_kolam from data_sampling ORDER BY kode_kolam ASC";
+        $sql = "SELECT size, id_kolam from data_sampling ORDER BY id_kolam ASC";
         return $this->db->query($sql)->result();
     }
 }

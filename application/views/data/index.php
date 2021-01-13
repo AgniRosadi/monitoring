@@ -5,30 +5,78 @@
             <div class="col-lg-12">
                 <?= $this->session->flashdata('message') ?>
             </div>
-            <div class="col-sm-12" style="margin-bottom:10px;">
-                <div class="card" style="border-color: blue;">
-                    <div class="card-body form-group row">
-                        <h5 class="card-title"><b><?= $title; ?></b></h5>
-                        <?php if ($user['role_id'] == 1) {
-                            echo '<a href="' . base_url() . 'data/form_air style="margin-left: auto;" class="btn btn-primary"><i class="fa fa-plus"></i> Tambah</a>
-                        ';
-                        } else {
-                            echo '';
-                        } ?>
-                    </div>
-                </div>
-            </div>
+
         </div>
+        <div class="col-sl-12">
+         <!--    <div class="card shadow mb-4">
+                <a href="#collapseCardExample1" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample1">
+                    <h6 class="m-0 font-weight-bold text-primary">Tabel Data Air</h6>
+
+                </a> -->
+
+                <!-- Card Content - Collapse -->
+              <!--   <div class="collapse show" id="collapseCardExample1">
+
+                    <div class="card-body responsive">
+
+                        <div class="row">
+                            <div class="col-sm-12 mb-4">
+                                <select id="kode_kolam1" name="kode_kolam" class="form-control">
+                                    <option value="">--pilih kolam --</option>
+                                    <?php foreach ($kolamnya as $a) : ?>
+
+                                        <option value="<?= $a['kode_kolam']; ?>"><?= $a['kode_kolam']; ?>
+
+                                        </option>
+                                    <?php endforeach ?>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row text-center responsive" id="k">
+                            <div class="col-md-3 responsive">
+                                <image src="<?= base_url('assets/img/1.png') ?>">Suhu</image>
+                                <p>0</p>
+                            </div>
+                            <div class="col-md-3 mb-4 responsive">
+                                <image src="<?= base_url('assets/img/3.png') ?>">Salinitas</image>
+                                <p>0</p>
+                            </div>
+                            <div class="col-md-3" id="ph_pagi" name="ph_pagi">
+                                <image src="<?= base_url('assets/img/4.png') ?>">Ph Pagi</image>
+                                <p>0</p>
+                            </div>
+                            <div class="col-md-3" id="ph_sore" name="ph_sore">
+                                <image src="<?= base_url('assets/img/4.png') ?>">Ph Sore</image>
+                                <p>0</p>
+                            </div>
+                        </div>
 
 
-        <!-- Collapsable Card Example -->
-        <div class="card shadow mb-4">
-            <!-- Card Header - Accordion -->
-            <a href="#collapseCardExample1" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample1">
-                <h6 class="m-0 font-weight-bold text-primary">Tabel Data Air</h6>
-            </a>
-            <!-- Card Content - Collapse -->
-            <div class="collapse show" id="collapseCardExample1">
+                        <div class="mt-1 text-center small">
+                            <span class="mr-2">
+                                <i class="fas fa-circle text-success"></i> Baik
+                            </span>
+                            <span class="mr-2">
+                                <i class="fas fa-circle text-warning"></i> Kurang Baik
+                            </span>
+                            <span class="mr-2">
+                                <i class="fas fa-circle text-danger"></i> Buruk
+                            </span>
+                        </div>
+                    </div>
+                </div> -->
+         <!--    </div> -->
+
+            <!-- Collapsable Card Example -->
+            <div class="card shadow mb-4">
+                <!-- Card Header - Accordion -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Tabel Data Air</h6>
+                    <a href="<?= base_url('data/form_air'); ?>" class="btn btn-primary " style="margin-left: auto;"><i class="fa fa-plus"></i> Tambah</a>
+
+                </div>
+
                 <div class="card-body">
 
                     <!-- <div class="card-header">
@@ -44,7 +92,7 @@
                                 <thead>
                                     <tr>
                                         <th>Tanggal</th>
-                                        <th>Kode Kolam</th>
+                                         <th>Kode Kolam</th>
                                         <th>Suhu</th>
                                         <th>Salinitas</th>
                                         <th>Ph Pagi</th>
@@ -57,7 +105,9 @@
                                 </thead>
                                 <tbody>
                                     <?php $i = 1; ?>
+                                    <?php $ai = $this->db->query("SELECT * from data_kolam d join data_parsial p on p.id_kolam = d.id_kolam join parsial l on l.id_parsial = p.id_parsial")->result_array(); ?>
                                     <?php foreach ($airnya as $ai) : ?>
+
                                         <tr>
 
                                             <td><?= date('d-m-y', strtotime($ai['tanggal'])); ?></td>

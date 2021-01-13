@@ -34,57 +34,48 @@ class data extends CI_Controller
         $data['airnya'] = $this->db->get_where('data_air')->result_array();
         $data['kolam'] = $this->db->get_where('data_kolam')->result_array();
 
-        $this->form_validation->set_rules('tanggal', 'Tanggal', 'required|trim');
-        $this->form_validation->set_rules('kode_kolam', 'Kode Kolam', 'required|trim');
-        $this->form_validation->set_rules('salinitas', 'Salinitas', 'required|trim');
-
-        $this->form_validation->set_rules('ph_pagi', 'Ph Pagi', 'required|trim');
-        $this->form_validation->set_rules('ph_sore', 'Ph Sore', 'required|trim');
-        $this->form_validation->set_rules('kecerahan', 'Kecerahan', 'required|trim');
-        $this->form_validation->set_rules('cuaca', 'Cuaca', 'required|trim');
-        $this->form_validation->set_rules('suhu', 'Suhu', 'required|trim');
-        $this->form_validation->set_rules('tg_air', 'Tinggi Air', 'required|trim');
+        $this->load->view('templates/header', $data);
+        $this->load->view('templates/sidebar', $data);
+        $this->load->view('templates/topbar', $data);
+        $this->load->view('data/form_air', $data);
+        $this->load->view('templates/footer');
+    }
+    public function tambah_air()
+    {
 
 
+        $kd =  $this->input->post('kode_kolam');
+        $tg = $this->input->post('tanggal');
+        // $ai = $this->db->query("SELECT * from data_kolam d join data_air p on p.id_kolam = d.id_kolam ")->num_rows(); 
+        // $data = $ai['id_kolam'];
 
-        if ($this->form_validation->run() == false) {
-            $this->load->view('templates/header', $data);
-            $this->load->view('templates/sidebar', $data);
-            $this->load->view('templates/topbar', $data);
-            $this->load->view('data/form_air', $data);
-            $this->load->view('templates/footer');
-        } else {
+        $data['tanggal'] = $this->input->post('tanggal');
+        $data['kode_kolam'] = $this->input->post('kode_kolam');
+        $data['salinitas'] = $this->input->post('salinitas');
+        $data['ph_pagi'] = $this->input->post('ph_pagi');
+        $data['ph_sore'] = $this->input->post('ph_sore');
+        $data['kecerahan'] = $this->input->post('kecerahan');
+        $data['cuaca'] = $this->input->post('cuaca');
+        $data['suhu'] = $this->input->post('suhu');
+        $data['tg_air'] = $this->input->post('tg_air');
 
-            $kd =  $this->input->post('kode_kolam');
-            $tg = $this->input->post('tanggal');
 
-            $data = [
-                'tanggal' => $this->input->post('tanggal', true),
-                'kode_kolam' => $this->input->post('kode_kolam', true),
-                'salinitas' => $this->input->post('salinitas', true),
-                'ph_pagi' => $this->input->post('ph_pagi', true),
-                'ph_sore' => $this->input->post('ph_sore', true),
-                'kecerahan' => $this->input->post('kecerahan', true),
-                'cuaca' => $this->input->post('cuaca', true),
-                'suhu' => $this->input->post('suhu', true),
-                'tg_air' => $this->input->post('tg_air', true),
-            ];
 
-            $query1 = $this->db->query("SELECT * FROM data_air where tanggal = '$tg' and kode_kolam ='$kd' ")->num_rows();
+        $query1 = $this->db->query("SELECT * FROM data_air where tanggal = '$tg' and kode_kolam ='$kd' ")->num_rows();
 
-            if ($query1 >= 1) {
-                $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
+        if ($query1 >= 1) {
+            $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
                 Data sudah ada! </div>');
-                redirect('data/form_air');
-            } else {
-                $this->db->insert('data_air', $data);
+            redirect('data/form_air');
+        } else {
+            $this->db->insert('data_air', $data);
 
-                $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
+            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
                 Data berhasil di tambahkan! </div>');
-                redirect('data/index');
-            }
+            redirect('data/index');
         }
     }
+
 
     public function form_editA($air_id)
     {
@@ -141,12 +132,53 @@ class data extends CI_Controller
     }
 
     //Data Kolam
+    public function m_kolam()
+    {
+        $data['title'] = 'Kelola Kolam';
+        $data['user'] = $this->db->get_where('user', ['email' =>
+        $this->session->userdata('email')])->row_array();
+
+        $data['kolamtu'] = $this->db->get_where('kolam')->result();
+
+        $this->form_validation->set_rules('kode_kolam', 'Kode Kolam', 'required|trim');
+        $this->form_validation->set_rules('luas_kolam', 'Luas Kolam', 'required|trim');
+        $this->form_validation->set_rules('tipe_p', 'Tipe Pelastik', 'required|trim');
+
+        if ($this->form_validation->run() == false) {
+            $this->load->view('templates/header', $data);
+            $this->load->view('templates/sidebar', $data);
+            $this->load->view('templates/topbar', $data);
+            $this->load->view('data/kolam/m_kolam');
+            $this->load->view('templates/footer', $data);
+        } else {
+            $kode_kolam =  $this->input->post('kode_kolam');
+            $data = [
+                'kode_kolam' => $this->input->post('kode_kolam', true),
+                'luas_kolam' => $this->input->post('luas_kolam', true),
+                'tipe_p' => $this->input->post('tipe_p', true),
+                'status_kolam' => $this->input->post('status_kolam', true),
+
+            ];
+            $query1 =   $this->db->query("SELECT * from kolam where kode_kolam = '$kode_kolam'")->num_rows();
+            if ($query1 > 0) {
+                $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
+          Data kolam sudah ada! </div>');
+                redirect('data/kolam/m_kolam', $data);
+            } else {
+                $this->db->insert('kolam',  $data);
+                $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
+          Data berhasil di tambahkan! </div>');
+                redirect('data/kolam/m_kolam', $data);
+            }
+        }
+    }
     public function kolam()
     {
         $data['title'] = 'Kelola Data Kolam';
         $data['user'] = $this->db->get_where('user', ['email' =>
         $this->session->userdata('email')])->row_array();
         $data['kolamnya'] = $this->db->get_where('data_kolam')->result();
+        $data['kolam'] = $this->db->get_where('kolam')->result();
 
         $this->form_validation->set_rules('kode_kolam', 'Kode Kolam', 'required|trim');
         $this->form_validation->set_rules('luas_kolam', 'Luas Kolam', 'required|trim');
@@ -162,28 +194,35 @@ class data extends CI_Controller
             $this->load->view('data/kolam/kolam', $data);
             $this->load->view('templates/footer');
         } else {
-            $kode_kolam = $this->input->post('kode_kolam');
-            $data = [
-                'kode_kolam' => $this->input->post('kode_kolam', true),
-                'luas_kolam' => $this->input->post('luas_kolam', true),
-                'tanggal' => $this->input->post('tanggal', true),
-                'asal_b' => $this->input->post('asal_b', true),
-                'jumlah_tebar' => $this->input->post('jumlah_tebar', true),
-                'tipe_p' => $this->input->post('tipe_p', true),
-            ];
-            $query1 =   $this->db->query("SELECT * from data_kolam where kode_kolam = '$kode_kolam'")->num_rows();
-            if ($query1 > 0) {
-                $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
-                Data kolam sudah ada! </div>');
-                redirect('data/kolam/kolam', $data);
-            } else {
-                $this->db->insert('data_kolam', $data);
+            $k = $this->input->post('id_master_kolam');
+
+            $data =
+                [
+                    'id_master_kolam' => $this->input->post('id_master_kolam'),
+                    'kode_kolam' => $this->input->post('kode_kolam'),
+                    'luas_kolam' => $this->input->post('luas_kolam'),
+                    'tanggal' => $this->input->post('tanggal'),
+                    'asal_b' => $this->input->post('asal_b'),
+                    'jumlah_tebar' => $this->input->post('jumlah_tebar'),
+                    'tipe_p' => $this->input->post('tipe_p')
+                ];
+            $query1 = $this->db->query("SELECT * FROM kolam k join data_kolam d on k.id_master_kolam=d.id_master_kolam where k.id_master_kolam = $k");
+            if ($query1) {
+                $query1 = $this->db->query("UPDATE kolam set status_kolam = 'dipakai' where id_master_kolam = $k");
+                $this->db->insert('data_kolam',  $data);
+
                 $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
                 Data berhasil di tambahkan! </div>');
                 redirect('data/kolam/kolam', $data);
+            } else {
+                $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
+                 Data kolam sudah ada! </div>');
+                redirect('data/kolam/m_kolam', $data);
             }
         }
     }
+
+
 
     public function edit_kolam($kolam_id)
     {
@@ -348,21 +387,6 @@ class data extends CI_Controller
         redirect('data/sampling/sampling');
     }
 
-    public function status()
-    {
-
-        $data['title'] = 'Kelola Data Air';
-        $data['user'] = $this->db->get_where('user', ['email' =>
-        $this->session->userdata('email')])->row_array();
-
-        $data['status'] = $this->db->get_where('data_kolam')->result_array();
-
-        $this->load->view('templates/header', $data);
-        $this->load->view('templates/sidebar', $data);
-        $this->load->view('templates/topbar', $data);
-        $this->load->view('data/status/status', $data);
-        $this->load->view('templates/footer', $data);
-    }
 
     public function parsial()
     {
@@ -384,7 +408,7 @@ class data extends CI_Controller
         $data['user'] = $this->db->get_where('user', ['email' =>
         $this->session->userdata('email')])->row_array();
 
-        $data['kolam'] = $this->db->get_where('data_kolam')->result_array();
+        $data['kolam'] = $this->db->get_where('kolam')->result_array();
         $data['parsialnya'] = $this->db->get_where('data_parsial')->result_array();
 
         $this->form_validation->set_rules('no_parsial', 'Parsial', 'required|trim');
@@ -411,8 +435,8 @@ class data extends CI_Controller
     {
 
         $id_kolam = $this->input->post('kode_kolam');
-        $query1 = $this->db->query("SELECT id_siklus from data_parsial where id_kolam = $id_kolam order by id_siklus desc limit 1");
-        $query7 =  $this->db->query("SELECT id_siklus from data_parsial where id_kolam = $id_kolam order by id_siklus desc limit 1")->row_array();
+        $query1 = $this->db->query("SELECT id_siklus from data_parsial where id_master_kolam = $id_kolam order by id_siklus desc limit 1");
+        $query7 =  $this->db->query("SELECT id_siklus from data_parsial where id_master_kolam = $id_kolam order by id_siklus desc limit 1")->row_array();
         if ($query1->num_rows() == 1) {
 
             $urut = $query7['id_siklus'];
@@ -420,17 +444,17 @@ class data extends CI_Controller
 
             $urut = 1;
         }
-        $query2 = $this->db->query("SELECT * FROM data_parsial d join parsial p on p.id_parsial = d.id_parsial join data_kolam k on k.id_kolam = d.id_kolam where d.id_kolam = $id_kolam and d.id_siklus = $urut")->num_rows();
+        $query2 = $this->db->query("SELECT * FROM data_parsial d join parsial p on p.id_parsial = d.id_parsial join kolam k on k.id_master_kolam = d.id_master_kolam where d.id_master_kolam = $id_kolam and d.id_siklus = $urut")->num_rows();
 
-        if ($query2 <= 5) {
-
+        if ($query2 < 6) {
             $id_siklus = $urut;
-            var_dump($id_siklus);
+            $query2 = $this->db->query("UPDATE kolam set status_kolam = 'tidak dipakai' where id_master_kolam = $id_kolam");
         } else {
             $id_siklus = $urut + 1;
+            $query2 = $this->db->query("UPDATE kolam set status_kolam = 'dipakai' where id_master_kolam = $id_kolam");
         }
 
-        $data['id_kolam'] = $this->input->post('kode_kolam');
+        $data['id_master_kolam'] = $this->input->post('kode_kolam');
         $data['id_siklus'] = $id_siklus;
         $data['id_parsial'] = $this->input->post('no_parsial');
         $data['tanggal'] = $this->input->post('tanggal');
@@ -440,9 +464,7 @@ class data extends CI_Controller
         $data['biomasa'] = $this->input->post('biomasa');
         $data['populasi'] = $this->input->post('populasi');
         $data['parsial'] = $this->input->post('parsial');
-        $data['sisa_p'] = $this->input->post('sisa_p');
         $data['pemasukan'] = $this->input->post('pemasukan');
-        $data['total'] = $this->input->post('total');
 
         $query4 = $this->db->insert('data_parsial', $data);
         if ($query4) {
@@ -474,7 +496,6 @@ class data extends CI_Controller
         $this->form_validation->set_rules('biomasa', 'Biomasa', 'required|trim');
         $this->form_validation->set_rules('populasi', 'Populasi', 'required|trim');
         $this->form_validation->set_rules('parsial', 'Parsial', 'required|trim');
-        $this->form_validation->set_rules('sisa_p', 'Sisa Populasi', 'required|trim');
         $this->form_validation->set_rules('pemasukan', 'Pemasukan', 'required|trim');
         $this->form_validation->set_rules('total', 'Total', 'required|trim');
 
@@ -496,7 +517,6 @@ class data extends CI_Controller
                 'biomasa' => $this->input->post('biomasa', true),
                 'populasi' => $this->input->post('populasi', true),
                 'parsial' => $this->input->post('parsial', true),
-                'sisa_p' => $this->input->post('sisa_p', true),
                 'pemasukan' => $this->input->post('pemasukan', true),
                 'total' => $this->input->post('total', true),
             ];
@@ -514,17 +534,18 @@ class data extends CI_Controller
             Data berhasil di hapus </div>');
         redirect('data/parsial/parsial');
     }
+
     //parsial
     public function getParsial()
     {
         $id_kolam = $this->input->post('kode_kolam');
 
-        $query1 = $this->db->query("SELECT * FROM data_parsial d join data_kolam k on d.id_kolam = k.id_kolam where k.id_kolam = $id_kolam order by d.id_data_parsial desc limit 1")->row_array();
+        $query1 = $this->db->query("SELECT * FROM data_parsial d join kolam k on d.id_master_kolam = k.id_master_kolam where d.id_master_kolam = $id_kolam order by d.id_parsial desc limit 1")->row_array();
 
         if ($query1) {
             $id_parsial = $query1['id_parsial'];
 
-            if ($id_parsial > 5) {
+            if ($id_parsial > 6) {
                 $parsial_selanjutnya = 1;
             } else {
                 $parsial_selanjutnya = $id_parsial + 1;
@@ -706,158 +727,90 @@ class data extends CI_Controller
             }
         }
     }
-    public function excel()
-    {
-        // $data['parsial'] = $this->data_model->tampil_data('data_parsial')->result();
-        // require(APPPATH . 'PHPExcel-1.8/Classes/PHPExcel.php');
-        // require(APPPATH . 'PHPExcel-1.8/Classes/PHPExcel/Writer/Excel2007.php');
 
-        // Load plugin PHPExcel nya
-        include APPPATH . 'third_party/PHPExcel/PHPExcel.php';
 
-        // Panggil class PHPExcel nya
-        $excel = new PHPExcel();
+    // public function kolam_aja()
+    // {
+    //     $kode_kolam = $this->input->post('kode_kolam');
 
-        // Settingan awal fil excel
-        $excel->getProperties()->setCreator('My Notes Code')
-            ->setLastModifiedBy('My Notes Code')
-            ->setTitle("Data Parsial")
-            ->setSubject("Parsial")
-            ->setDescription("Laporan Semua Data Parsial")
-            ->setKeywords("Data Parsial");
+    //     $day = date('d');
+    //     $month = date('m');
+    //     $year = date('Y');
 
-        // Buat sebuah variabel untuk menampung pengaturan style dari header tabel
-        $style_col = array(
-            'font' => array('bold' => true), // Set font nya jadi bold
-            'alignment' => array(
-                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER, // Set text jadi ditengah secara horizontal (center)
-                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER // Set text jadi di tengah secara vertical (middle)
-            ),
-            'borders' => array(
-                'top' => array('style'  => PHPExcel_Style_Border::BORDER_THIN), // Set border top dengan garis tipis
-                'right' => array('style'  => PHPExcel_Style_Border::BORDER_THIN),  // Set border right dengan garis tipis
-                'bottom' => array('style'  => PHPExcel_Style_Border::BORDER_THIN), // Set border bottom dengan garis tipis
-                'left' => array('style'  => PHPExcel_Style_Border::BORDER_THIN) // Set border left dengan garis tipis
-            )
-        );
+    //     $tanggal = "$year-$month-$day";
+    //     $tgl = "$day/$month/$year";
 
-        // Buat sebuah variabel untuk menampung pengaturan style dari isi tabel
-        $style_row = array(
-            'alignment' => array(
-                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER // Set text jadi di tengah secara vertical (middle)
-            ),
-            'borders' => array(
-                'top' => array('style'  => PHPExcel_Style_Border::BORDER_THIN), // Set border top dengan garis tipis
-                'right' => array('style'  => PHPExcel_Style_Border::BORDER_THIN),  // Set border right dengan garis tipis
-                'bottom' => array('style'  => PHPExcel_Style_Border::BORDER_THIN), // Set border bottom dengan garis tipis
-                'left' => array('style'  => PHPExcel_Style_Border::BORDER_THIN) // Set border left dengan garis tipis
-            )
-        );
 
-        $excel->setActiveSheetIndex(0)->setCellValue('A1', "LAPORAN DATA PARSIAL"); // Set kolom A1 dengan tulisan "DATA PEMUDIK"
-        $excel->getActiveSheet()->mergeCells('A1:n1'); // Set Merge Cell pada kolom A1 sampai E1
-        $excel->getActiveSheet()->getStyle('A1')->getFont()->setBold(true); // Set bold kolom A1
-        $excel->getActiveSheet()->getStyle('A1')->getFont()->setSize(15); // Set font size 15 untuk kolom A1
-        $excel->getActiveSheet()->getStyle('A1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER); // Set text center untuk kolom A1
+    //     //pr
+    //     $query = $this->db->query("SELECT * from data_air where kode_kolam = '$kode_kolam' AND tanggal = '$tanggal'")->row_array();
+    //     $output = "";
+    //     if ($query) {
 
-        // Buat header tabel nya pada baris ke 3
-        $excel->setActiveSheetIndex(0)->setCellValue('A3', "NO"); // Set kolom A3 dengan tulisan "NO"
-        $excel->setActiveSheetIndex(0)->setCellValue('B3', "TANGGAL"); // Set kolom B3 dengan tulisan "NIS"
-        $excel->setActiveSheetIndex(0)->setCellValue('C3', "KODE KOLAM"); // Set kolom C3 dengan tulisan "NAMA"
-        $excel->setActiveSheetIndex(0)->setCellValue('D3', "NO PASRIAL"); // Set kolom C3 dengan tulisan "NAMA"
-        $excel->setActiveSheetIndex(0)->setCellValue('E3', "HARI"); // Set kolom D3 dengan tulisan "JENIS KELAMIN"
-        $excel->setActiveSheetIndex(0)->setCellValue('F3', "MBW (GRAM)"); // Set kolom E3 dengan tulisan "ALAMAT"
-        $excel->setActiveSheetIndex(0)->setCellValue('G3', "SIZE (EK/GRAM)");
-        $excel->setActiveSheetIndex(0)->setCellValue('H3', "BIOMASA (KG)");
-        $excel->setActiveSheetIndex(0)->setCellValue('I3', "POPULASI");
-        $excel->setActiveSheetIndex(0)->setCellValue('J3', "PARSIAL (%)");
-        $excel->setActiveSheetIndex(0)->setCellValue('K3', "SISA POPULASI");
-        $excel->setActiveSheetIndex(0)->setCellValue('L3', "PEMASUKAN");
-        $excel->setActiveSheetIndex(0)->setCellValue('M3', "TOTAL");
-        // Apply style header yang telah kita buat tadi ke masing-masing kolom header
-        $excel->getActiveSheet()->getStyle('A3')->applyFromArray($style_col);
-        $excel->getActiveSheet()->getStyle('B3')->applyFromArray($style_col);
-        $excel->getActiveSheet()->getStyle('C3')->applyFromArray($style_col);
-        $excel->getActiveSheet()->getStyle('D3')->applyFromArray($style_col);
-        $excel->getActiveSheet()->getStyle('E3')->applyFromArray($style_col);
-        $excel->getActiveSheet()->getStyle('F3')->applyFromArray($style_col);
-        $excel->getActiveSheet()->getStyle('G3')->applyFromArray($style_col);
-        $excel->getActiveSheet()->getStyle('H3')->applyFromArray($style_col);
-        $excel->getActiveSheet()->getStyle('I3')->applyFromArray($style_col);
-        $excel->getActiveSheet()->getStyle('J3')->applyFromArray($style_col);
-        $excel->getActiveSheet()->getStyle('K3')->applyFromArray($style_col);
-        $excel->getActiveSheet()->getStyle('L3')->applyFromArray($style_col);
-        $excel->getActiveSheet()->getStyle('M3')->applyFromArray($style_col);
+    //         $suhu = $query['suhu'];
+    //         $salinitas = $query['salinitas'];
+    //         $ph_pagi = $query['ph_pagi'];
+    //         $ph_sore = $query['ph_sore'];
 
-        // Panggil function view yang ada di PEMUDIKModel untuk menampilkan semua data siswanya
-        $parsial = $this->data_model->tampil_data();
+    //         $suhu1 = $query['suhu'];
 
-        $no = 1; // Untuk penomoran tabel, di awal set dengan 1
-        $numrow = 4; // Set baris pertama untuk isi tabel adalah baris ke 4
-        foreach ($parsial as $data) { // Lakukan looping pada variabel siswa
-            $excel->setActiveSheetIndex(0)->setCellValue('A' . $numrow, $no);
-            $excel->setActiveSheetIndex(0)->setCellValue('B' . $numrow, $data->tanggal);
-            $excel->setActiveSheetIndex(0)->setCellValue('C' . $numrow, $data->kode_kolam);
-            $excel->setActiveSheetIndex(0)->setCellValue('D' . $numrow, $data->no_parsial);
-            $excel->setActiveSheetIndex(0)->setCellValue('E' . $numrow, $data->hari);
-            $excel->setActiveSheetIndex(0)->setCellValue('F' . $numrow, $data->mbw);
-            $excel->setActiveSheetIndex(0)->setCellValue('G' . $numrow, $data->size);
-            $excel->setActiveSheetIndex(0)->setCellValue('H' . $numrow, $data->biomasa);
-            $excel->setActiveSheetIndex(0)->setCellValue('I' . $numrow, $data->populasi);
-            $excel->setActiveSheetIndex(0)->setCellValue('J' . $numrow, $data->parsial);
-            $excel->setActiveSheetIndex(0)->setCellValue('K' . $numrow, $data->sisa_p);
-            $excel->setActiveSheetIndex(0)->setCellValue('L' . $numrow, $data->pemasukan);
-            $excel->setActiveSheetIndex(0)->setCellValue('M' . $numrow, $data->total);
+    //         if ($salinitas >= 15 && $salinitas <= 25) {
 
-            // Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
-            $excel->getActiveSheet()->getStyle('A' . $numrow)->applyFromArray($style_row);
-            $excel->getActiveSheet()->getStyle('B' . $numrow)->applyFromArray($style_row);
-            $excel->getActiveSheet()->getStyle('C' . $numrow)->applyFromArray($style_row);
-            $excel->getActiveSheet()->getStyle('D' . $numrow)->applyFromArray($style_row);
-            $excel->getActiveSheet()->getStyle('E' . $numrow)->applyFromArray($style_row);
-            $excel->getActiveSheet()->getStyle('F' . $numrow)->applyFromArray($style_row);
-            $excel->getActiveSheet()->getStyle('G' . $numrow)->applyFromArray($style_row);
-            $excel->getActiveSheet()->getStyle('H' . $numrow)->applyFromArray($style_row);
-            $excel->getActiveSheet()->getStyle('I' . $numrow)->applyFromArray($style_row);
-            $excel->getActiveSheet()->getStyle('J' . $numrow)->applyFromArray($style_row);
-            $excel->getActiveSheet()->getStyle('K' . $numrow)->applyFromArray($style_row);
-            $excel->getActiveSheet()->getStyle('L' . $numrow)->applyFromArray($style_row);
-            $excel->getActiveSheet()->getStyle('M' . $numrow)->applyFromArray($style_row);
+    //             $bade = 'text-success';
+    //             $fa = 'fa fw fa-caret-up';
+    //         } else if ($salinitas > 25) {
+    //             $bade = 'text-warning';
+    //             $fa = 'fa fw fa-caret-left';
+    //         } else {
+    //             $bade = 'text-danger';
+    //             $fa = 'fa fw fa-caret-down';
+    //         }
 
-            $no++; // Tambah 1 setiap kali looping
-            $numrow++; // Tambah 1 setiap kali looping
-        }
+    //         if ($ph_pagi >= 7.5 && $ph_pagi <= 8) {
 
-        // Set width kolom
-        $excel->getActiveSheet()->getColumnDimension('A')->setWidth(5); // Set width kolom A
-        $excel->getActiveSheet()->getColumnDimension('B')->setWidth(15); // Set width kolom B
-        $excel->getActiveSheet()->getColumnDimension('C')->setWidth(25); // Set width kolom C
-        $excel->getActiveSheet()->getColumnDimension('D')->setWidth(20); // Set width kolom D
-        $excel->getActiveSheet()->getColumnDimension('E')->setWidth(30); // Set width kolom E
-        $excel->getActiveSheet()->getColumnDimension('F')->setWidth(30); // Set width kolom E
-        $excel->getActiveSheet()->getColumnDimension('G')->setWidth(30); // Set width kolom E
-        $excel->getActiveSheet()->getColumnDimension('H')->setWidth(30); // Set width kolom E
-        $excel->getActiveSheet()->getColumnDimension('I')->setWidth(30); // Set width kolom E
-        $excel->getActiveSheet()->getColumnDimension('J')->setWidth(30); // Set width kolom E
-        $excel->getActiveSheet()->getColumnDimension('K')->setWidth(30); // Set width kolom E
-        $excel->getActiveSheet()->getColumnDimension('L')->setWidth(30); // Set width kolom E
-        $excel->getActiveSheet()->getColumnDimension('M')->setWidth(30); // Set width kolom E
-        // Set height semua kolom menjadi auto (mengikuti height isi dari kolommnya, jadi otomatis)
-        $excel->getActiveSheet()->getDefaultRowDimension()->setRowHeight(-1);
+    //             $bade1 = 'text-success';
+    //             $fa1 = 'fa fw fa-caret-up';
+    //         } else if ($ph_pagi > 8) {
+    //             $bade1 = 'text-warning';
+    //             $fa1 = 'fa fw fa-caret-left';
+    //         } else {
+    //             $bade1 = 'text-danger';
+    //             $fa1 = 'fa fw fa-caret-down';
+    //         }
 
-        // Set orientasi kertas jadi LANDSCAPE
-        $excel->getActiveSheet()->getPageSetup()->setOrientation(PHPExcel_Worksheet_PageSetup::ORIENTATION_LANDSCAPE);
+    //         if ($ph_sore >= 8 && $ph_pagi <= 8.4) {
 
-        // Set judul file excel nya
-        $excel->getActiveSheet(0)->setTitle("Laporan Data Parsial");
-        $excel->setActiveSheetIndex(0);
+    //             $bade2 = 'text-success';
+    //             $fa2 = 'fa fw fa-caret-up';
+    //         } else if ($ph_sore > 8.4) {
+    //             $bade2 = 'text-warning';
+    //             $fa2 = 'fa fw fa-caret-left';
+    //         } else {
+    //             $bade2 = 'text-danger';
+    //             $fa2 = 'fa fw fa-caret-down';
+    //         }
 
-        // Proses file excel
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment; filename="Data Parsial.xlsx"'); // Set nama file excel nya
-        header('Cache-Control: max-age=0');
+    //         $output .= '
+    //       <div class="col-md-6 mb-4">
+    //                                 <image src="' . base_url() . 'assets/img/1.png">Suhu <i class="fa fw fa-caret-up text-success"></i></image>
+    //                                  <p>' . $suhu . '</p>
+    //                             </div>
+    //                             <div class="col-md-6">
+    //                                 <image src="' . base_url() . 'assets/img/2.png">Salinitas  <i class="fa fw ' . $fa . ' ' . $bade . '"></i></image>
+    //                                 <p>' . $salinitas . '</p>
+    //                             </div>
+    //                             <div class="col-md-6">
+    //                                 <image src="' . base_url() . 'assets/img/3.png">Ph Pagi  <i class="fa fw ' . $fa1 . ' ' . $bade1 . '"></i></image>
+    //                                  <p>' . $ph_pagi . '</p>
+    //                             </div>
+    //                             <div class="col-md-6">
+    //                                 <image src="' . base_url() . 'assets/img/4.png">Ph Sore  <i class="fa fw ' . $fa2 . ' ' . $bade2 . '"></i></image>
+    //                                  <p>' . $ph_sore . '</p>
+    //                             </div>';
+    //     } else {
 
-        $write = PHPExcel_IOFactory::createWriter($excel, 'Excel2007');
-        $write->save('php://output');
-    }
+    //         $output .= '<p>Data Kolam ' . $kode_kolam . ' pada ' . $tgl . ' belum diinputkan</p>';
+    //     }
+
+    //     echo $output;
+    // }
 }

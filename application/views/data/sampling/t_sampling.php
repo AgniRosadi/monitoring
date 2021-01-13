@@ -26,12 +26,13 @@
  							<label>Kode Kolam</label>
  							<select id="kode_kolam" name="kode_kolam" class="form-control">
  								<option value="">-Pilih-</option>
- 								<?php foreach ($kolam as $a) : ?>
-
- 									<option value="<?= $a['kode_kolam']; ?>"><?= $a['kode_kolam']; ?>
-
- 									</option>
- 								<?php endforeach ?>
+ 								  <?php
+                                                $query1 = $this->db->query("SELECT * FROM kolam where status_kolam = 'dipakai'")->result();
+                                                foreach ($query1 as $k) { ?>
+                                                   
+                                                        <option><?php echo $k->kode_kolam  ?></option>
+                                                <?php  
+                                                } ?>
  							</select>
  						</div>
  					</div>
@@ -66,16 +67,12 @@
  							<?= form_error('pakan', '<small class="text-danger pl-3">', '</small>'); ?>
  						</div>
  						<div class="form-group col-md-6">
- 							<label>Estimasi</label>
- 							<input type="number" min="1" class="form-control" id="estimasi" name="estimasi">
- 							<?= form_error('estimasi', '<small class="text-danger pl-3">', '</small>'); ?>
- 						</div>
- 					</div>
- 					<div class="form-group ">
- 						<label>Keterangan</label>
+ 								<label>Keterangan</label>
  						<input type="text" class="form-control" id="ket" name="ket">
  						<?= form_error('ket', '<small class="text-danger pl-3">', '</small>'); ?>
+ 						</div>
  					</div>
+ 					
  				</div>
  				<div class="card-footer">
  					<button type="submit" class="btn btn-primary">Simpan</button>

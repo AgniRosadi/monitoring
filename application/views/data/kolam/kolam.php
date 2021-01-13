@@ -26,12 +26,29 @@
                             <div class="collapse show" id="collapseCardExample">
                                 <div class="card-body">
                                     <div class="form-row">
-
+                                        
                                         <div class="form-group col-md-12">
                                             <label>Kode Kolam</label>
-                                            <input type="text" class="form-control" id="kode_kolam" name="kode_kolam" placeholder="Contoh kode Kolam a/b/c">
-                                            <?= form_error('kode_kolam', '<small class="text-danger pl-3">', '</small>'); ?>
+                                            <select id="kode_kolam" name="kode_kolam" class="form-control">
+                                                <?php
+                                                $query1 = $this->db->query("SELECT * FROM kolam where status_kolam = 'tidak dipakai'")->result();
+                                                foreach ($query1 as $k) { ?>
+
+                                                    <option><?php echo $k->kode_kolam  ?></option>
+                                                <?php
+                                                } ?>
+                                                <!--  <option>--pilih parsial---</option> -->
+                                            </select>
                                         </div>
+                                        <div class="form-group col-md-6">
+                                            <?php $query2 = $this->db->query("SELECT * FROM kolam")->result();
+                                            foreach ($query2 as $k) { ?>
+                                                <input type="hidden" value="<?= $k->id_master_kolam ?>" min="1" class="form-control" id="id_master_kolam" name="id_master_kolam">
+
+                                            <?php
+                                            } ?>
+                                        </div>
+
                                     </div>
                                     <div class="form-row">
                                         <div class="form-group col-md-6">
@@ -96,27 +113,13 @@
                                     <th>Asal Benur</th>
                                     <th>Jumlah Tebar</th>
                                     <th>Tipe Petak</th>
-                                    <th>Status Kolam</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php $i = 1;
-                                $statuss = ''; ?>
+                                <?php $i = 1; ?>
                                 <?php foreach ($kolamnya as $ko) :
-
-
                                 ?>
-
-                                    <?php
-
-                                    $query1 = $this->db->query("SELECT id_parsial from data_parsial d join data_kolam k on d.id_kolam = k.id_kolam where k.id_kolam = $ko->id_kolam order by d.id_data_parsial desc limit 1")->row_array();
-                                    if ($query1['id_parsial'] > 5) {
-                                        $statuss = 'dipakai';
-                                    } else {
-                                        $statuss = 'tidak dipakai';
-                                    } ?>
-
                                     <tr>
                                         <th scope="row"><?= $i; ?></th>
                                         <td><?= $ko->kode_kolam; ?></td>
@@ -125,9 +128,7 @@
                                         <td><?= $ko->asal_b; ?></td>
                                         <td><?= $ko->jumlah_tebar; ?></td>
                                         <td><?= $ko->tipe_p; ?></td>
-                                        <td><?= $statuss; ?></td>
                                         <td> <a href="<?= base_url('data/edit_kolam/') . $ko->id_kolam;  ?>" class="badge badge-success">edit</a>
-                                            <a href="<?= base_url('data/delete/') . $ko->id_kolam;  ?>" class="badge badge-danger" data-confirm="Anda yakin akan menghapus data ini?">Hapus<i class=”fa fa-trash”></i></a>
                                         </td>
                                     </tr>
                                     <?php $i++ ?>

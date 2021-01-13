@@ -8,7 +8,7 @@
 
         <?= $this->session->flashdata('message'); ?>
 
-        <form action="<?= base_url('data/form_air'); ?>" method="post">
+        <form action="<?= base_url('data/tambah_air'); ?>" method="post">
             <!-- Card Header - Accordion -->
             <a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
                 <h6 class="m-0 font-weight-bold text-primary">Tambah Data Sampling</h6>
