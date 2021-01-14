@@ -24,6 +24,8 @@
          $query12 = $this->db->query("SELECT * FROM data_parsial where id_master_kolam = $q->id_master_kolam group by id_siklus order by id_parsial desc")->result();
 
         foreach ($query12 as $key => $qr) {
+
+
               ?>
 
         <!-- Collapsable Card Example -->
@@ -61,6 +63,8 @@
 
                                     <?php $query14 = $this->db->query("SELECT * FROM data_parsial d join parsial p on d.id_parsial = p.id_parsial where d.id_master_kolam = $q->id_master_kolam and d.id_siklus = $qr->id_siklus order by d.id_parsial asc")->result();
 
+                                    $jmlh = $this->db->query("SELECT sum(pemasukan) as jumlah FROM data_parsial d join parsial p on d.id_parsial = p.id_parsial where d.id_master_kolam = $q->id_master_kolam and d.id_siklus = $qr->id_siklus order by d.id_parsial asc")->row_array();
+
                                     foreach ($query14 as  $qw) {
                                          # code...
                                       ?>
@@ -85,7 +89,7 @@
                             </table>
                         </div>
                     </div>
-                     <h4>total pemasukan pada kolam <?php echo $q->kode_kolam ?> siklus <?php echo $qr->id_siklus ?> adalah </h4>
+                     <h4>total pemasukan pada kolam <?php echo $q->kode_kolam ?> siklus <?php echo $qr->id_siklus ?> adalah <?php echo $jmlh['jumlah'] ?></h4>
                 </div>
             </div>
         </div>

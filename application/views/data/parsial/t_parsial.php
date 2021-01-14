@@ -18,21 +18,22 @@
 				<div class="card-body">
 					<div class="form-row">
 						<div class="form-group col-md-6">
-							<label>No_Parsial</label>
-							<select id="no_parsial" name="no_parsial" class="form-control">
-								<option>--pilih parsial---</option>
-							</select>
-						</div>
-						<div class="form-group col-md-6">
 							<label>Kode Kolam</label>
 							<select id="kode_kolam" name="kode_kolam" class="form-control">
+								<option>pilih kolam</option>
 								<?php
 								$query1 = $this->db->query("SELECT * FROM kolam where status_kolam = 'dipakai'")->result();
 								foreach ($query1 as $k) { ?>
 
-									<option><?php echo $k->kode_kolam  ?></option>
+									<option value="<?php echo $k->id_master_kolam ?>"><?php echo $k->kode_kolam  ?></option>
 								<?php
 								} ?>
+							</select>
+						</div>
+						<div class="form-group col-md-6">
+							<label>No_Parsial</label>
+							<select id="no_parsial" name="no_parsial" class="form-control">
+								<option>--pilih parsial---</option>
 							</select>
 						</div>
 					</div>
@@ -44,8 +45,17 @@
 						</div>
 						<div class="form-group col-md-6">
 							<label>Hari</label>
-							<input type="text" class="form-control" id="hari" name="hari">
-							<?= form_error('hari', '<small class="text-danger pl-3">', '</small>'); ?>
+							<select name="hari" class="form-control">
+								<option>senin</option>
+								<option>selasa</option>
+								<option>rabu</option>
+								<option>kamis</option>
+								<option>jumat</option>
+								<option>sabtu</option>
+								<option>minggu</option>
+
+							</select>
+							
 						</div>
 					</div>
 					<div class="form-row">

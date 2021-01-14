@@ -34,19 +34,11 @@
                                                 $query1 = $this->db->query("SELECT * FROM kolam where status_kolam = 'tidak dipakai'")->result();
                                                 foreach ($query1 as $k) { ?>
 
-                                                    <option><?php echo $k->kode_kolam  ?></option>
+                                                    <option value=" <?php echo $k->id_master_kolam ?>"><?php echo $k->kode_kolam  ?></option>
                                                 <?php
                                                 } ?>
                                                 <!--  <option>--pilih parsial---</option> -->
                                             </select>
-                                        </div>
-                                        <div class="form-group col-md-6">
-                                            <?php $query2 = $this->db->query("SELECT * FROM kolam")->result();
-                                            foreach ($query2 as $k) { ?>
-                                                <input type="hidden" value="<?= $k->id_master_kolam ?>" min="1" class="form-control" id="id_master_kolam" name="id_master_kolam">
-
-                                            <?php
-                                            } ?>
                                         </div>
 
                                     </div>

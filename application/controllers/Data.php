@@ -156,7 +156,7 @@ class data extends CI_Controller
                 'kode_kolam' => $this->input->post('kode_kolam', true),
                 'luas_kolam' => $this->input->post('luas_kolam', true),
                 'tipe_p' => $this->input->post('tipe_p', true),
-                'status_kolam' => $this->input->post('status_kolam', true),
+                'status_kolam' => 'tidak dipakai'
 
             ];
             $query1 =   $this->db->query("SELECT * from kolam where kode_kolam = '$kode_kolam'")->num_rows();
@@ -194,11 +194,10 @@ class data extends CI_Controller
             $this->load->view('data/kolam/kolam', $data);
             $this->load->view('templates/footer');
         } else {
-            $k = $this->input->post('id_master_kolam');
+            $k = $this->input->post('kode_kolam');
 
             $data =
                 [
-                    'id_master_kolam' => $this->input->post('id_master_kolam'),
                     'kode_kolam' => $this->input->post('kode_kolam'),
                     'luas_kolam' => $this->input->post('luas_kolam'),
                     'tanggal' => $this->input->post('tanggal'),
@@ -206,14 +205,15 @@ class data extends CI_Controller
                     'jumlah_tebar' => $this->input->post('jumlah_tebar'),
                     'tipe_p' => $this->input->post('tipe_p')
                 ];
-            $query1 = $this->db->query("SELECT * FROM kolam k join data_kolam d on k.id_master_kolam=d.id_master_kolam where k.id_master_kolam = $k");
-            if ($query1) {
-                $query1 = $this->db->query("UPDATE kolam set status_kolam = 'dipakai' where id_master_kolam = $k");
-                $this->db->insert('data_kolam',  $data);
 
-                $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
+                $query1 =  $this->db->insert('data_kolam',  $data);
+            if ($query1) {
+                $query2 = $this->db->query("UPDATE kolam set status_kolam = 'dipakai' where id_master_kolam = $k");
+                if($query2){
+                    $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
                 Data berhasil di tambahkan! </div>');
                 redirect('data/kolam/kolam', $data);
+                }
             } else {
                 $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
                  Data kolam sudah ada! </div>');
@@ -446,12 +446,12 @@ class data extends CI_Controller
         }
         $query2 = $this->db->query("SELECT * FROM data_parsial d join parsial p on p.id_parsial = d.id_parsial join kolam k on k.id_master_kolam = d.id_master_kolam where d.id_master_kolam = $id_kolam and d.id_siklus = $urut")->num_rows();
 
-        if ($query2 < 6) {
+        if ($query2 <= 5) {
+             $query2 = $this->db->query("UPDATE kolam set status_kolam = 'tidak dipakai' where id_master_kolam = $id_kolam");
             $id_siklus = $urut;
-            $query2 = $this->db->query("UPDATE kolam set status_kolam = 'tidak dipakai' where id_master_kolam = $id_kolam");
-        } else {
+        }
+         else {
             $id_siklus = $urut + 1;
-            $query2 = $this->db->query("UPDATE kolam set status_kolam = 'dipakai' where id_master_kolam = $id_kolam");
         }
 
         $data['id_master_kolam'] = $this->input->post('kode_kolam');
@@ -545,7 +545,7 @@ class data extends CI_Controller
         if ($query1) {
             $id_parsial = $query1['id_parsial'];
 
-            if ($id_parsial > 6) {
+            if ($id_parsial > 5) {
                 $parsial_selanjutnya = 1;
             } else {
                 $parsial_selanjutnya = $id_parsial + 1;
