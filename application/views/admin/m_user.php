@@ -76,7 +76,7 @@
                                                     <td><?= $m['email']; ?></td>
                                                     <td><?= $m['role_id']; ?></td>
                                                     <td><?= $m['date_created']; ?></td>
-                                                    <td> <a href="<?= base_url('data/update/') . $m['id'];  ?>" class="badge badge-success">edit</a>
+                                                    <td>
                                                         <a href="<?= base_url('data/delete/') . $m['id'];  ?>" class="badge badge-danger">delete</a>
                                                     </td>
                                                 </tr>

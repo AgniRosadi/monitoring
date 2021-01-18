@@ -35,7 +35,7 @@ class data_model extends CI_Model
     {
         $this->db->select('*');
         $this->db->from('data_parsial');
-        $this->db->order_by("id_kolam", "desc");
+        $this->db->order_by("id_master_kolam", "desc");
         $query = $this->db->get()->result();
         return $query;
     }

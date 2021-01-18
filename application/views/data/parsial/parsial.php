@@ -80,8 +80,8 @@
                                             <td><?= $qw->parsial ?> </td>
                                             <td><?= $qw->pemasukan ?> </td>
 
-                                            <td> <a href=" base_url('data/u_parsial/') $qw->id_parsial  " class="badge badge-success">edit</a>
-                                                <a href=" base_url('data/d_parsial/') $qw->id_parsial  " class="badge badge-danger" data-confirm="Anda yakin akan menghapus data ini?">delete</a>
+                                            <td>   <a href="<?= base_url('data/u_parsial/') . $qw->id_data_parsial;  ?>" class="badge badge-success">edit</a>
+                                               
                                             </td>
                                         </tr>
                                     <?php } ?>

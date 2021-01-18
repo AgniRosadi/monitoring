@@ -96,17 +96,14 @@ class laporan extends CI_Controller
         // Buat header tabel nya pada baris ke 3
         $excel->setActiveSheetIndex(0)->setCellValue('A3', "NO"); // Set kolom A3 dengan tulisan "NO"
         $excel->setActiveSheetIndex(0)->setCellValue('B3', "TANGGAL"); // Set kolom B3 dengan tulisan "NIS"
-        $excel->setActiveSheetIndex(0)->setCellValue('C3', "ID KOLAM"); // Set kolom C3 dengan tulisan "NAMA"
-        $excel->setActiveSheetIndex(0)->setCellValue('D3', "NO PASRIAL"); // Set kolom C3 dengan tulisan "NAMA"
-        $excel->setActiveSheetIndex(0)->setCellValue('E3', "HARI"); // Set kolom D3 dengan tulisan "JENIS KELAMIN"
-        $excel->setActiveSheetIndex(0)->setCellValue('F3', "MBW (GRAM)"); // Set kolom E3 dengan tulisan "ALAMAT"
-        $excel->setActiveSheetIndex(0)->setCellValue('G3', "SIZE (EK/GRAM)");
-        $excel->setActiveSheetIndex(0)->setCellValue('H3', "BIOMASA (KG)");
-        $excel->setActiveSheetIndex(0)->setCellValue('I3', "POPULASI");
-        $excel->setActiveSheetIndex(0)->setCellValue('J3', "PARSIAL (%)");
-        $excel->setActiveSheetIndex(0)->setCellValue('K3', "SISA POPULASI");
-        $excel->setActiveSheetIndex(0)->setCellValue('L3', "PEMASUKAN");
-        $excel->setActiveSheetIndex(0)->setCellValue('M3', "TOTAL");
+        $excel->setActiveSheetIndex(0)->setCellValue('C3', "NO PASRIAL"); // Set kolom C3 dengan tulisan "NAMA"
+        $excel->setActiveSheetIndex(0)->setCellValue('D3', "HARI"); // Set kolom D3 dengan tulisan "JENIS KELAMIN"
+        $excel->setActiveSheetIndex(0)->setCellValue('E3', "MBW (GRAM)"); // Set kolom E3 dengan tulisan "ALAMAT"
+        $excel->setActiveSheetIndex(0)->setCellValue('F3', "SIZE (EK/GRAM)");
+        $excel->setActiveSheetIndex(0)->setCellValue('G3', "BIOMASA (KG)");
+        $excel->setActiveSheetIndex(0)->setCellValue('H3', "POPULASI");
+        $excel->setActiveSheetIndex(0)->setCellValue('I3', "PARSIAL (%)");
+        $excel->setActiveSheetIndex(0)->setCellValue('J3', "PEMASUKAN");
         // Apply style header yang telah kita buat tadi ke masing-masing kolom header
         $excel->getActiveSheet()->getStyle('A3')->applyFromArray($style_col);
         $excel->getActiveSheet()->getStyle('B3')->applyFromArray($style_col);
@@ -118,9 +115,6 @@ class laporan extends CI_Controller
         $excel->getActiveSheet()->getStyle('H3')->applyFromArray($style_col);
         $excel->getActiveSheet()->getStyle('I3')->applyFromArray($style_col);
         $excel->getActiveSheet()->getStyle('J3')->applyFromArray($style_col);
-        $excel->getActiveSheet()->getStyle('K3')->applyFromArray($style_col);
-        $excel->getActiveSheet()->getStyle('L3')->applyFromArray($style_col);
-        $excel->getActiveSheet()->getStyle('M3')->applyFromArray($style_col);
 
         // Panggil function view yang ada di PEMUDIKModel untuk menampilkan semua data siswanya
         $parsial = $this->data_model->tampil_data();
@@ -130,17 +124,14 @@ class laporan extends CI_Controller
         foreach ($parsial as $data) { // Lakukan looping pada variabel siswa
             $excel->setActiveSheetIndex(0)->setCellValue('A' . $numrow, $no);
             $excel->setActiveSheetIndex(0)->setCellValue('B' . $numrow, $data->tanggal);
-            $excel->setActiveSheetIndex(0)->setCellValue('C' . $numrow, $data->id_kolam);
-            $excel->setActiveSheetIndex(0)->setCellValue('D' . $numrow, $data->id_parsial);
-            $excel->setActiveSheetIndex(0)->setCellValue('E' . $numrow, $data->hari);
-            $excel->setActiveSheetIndex(0)->setCellValue('F' . $numrow, $data->mbw);
-            $excel->setActiveSheetIndex(0)->setCellValue('G' . $numrow, $data->size);
-            $excel->setActiveSheetIndex(0)->setCellValue('H' . $numrow, $data->biomasa);
-            $excel->setActiveSheetIndex(0)->setCellValue('I' . $numrow, $data->populasi);
-            $excel->setActiveSheetIndex(0)->setCellValue('J' . $numrow, $data->parsial);
-            $excel->setActiveSheetIndex(0)->setCellValue('K' . $numrow, $data->sisa_p);
-            $excel->setActiveSheetIndex(0)->setCellValue('L' . $numrow, $data->pemasukan);
-            $excel->setActiveSheetIndex(0)->setCellValue('M' . $numrow, $data->total);
+            $excel->setActiveSheetIndex(0)->setCellValue('C' . $numrow, $data->id_parsial);
+            $excel->setActiveSheetIndex(0)->setCellValue('D' . $numrow, $data->hari);
+            $excel->setActiveSheetIndex(0)->setCellValue('E' . $numrow, $data->mbw);
+            $excel->setActiveSheetIndex(0)->setCellValue('F' . $numrow, $data->size);
+            $excel->setActiveSheetIndex(0)->setCellValue('G' . $numrow, $data->biomasa);
+            $excel->setActiveSheetIndex(0)->setCellValue('H' . $numrow, $data->populasi);
+            $excel->setActiveSheetIndex(0)->setCellValue('I' . $numrow, $data->parsial);
+            $excel->setActiveSheetIndex(0)->setCellValue('J' . $numrow, $data->pemasukan);
 
             // Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
             $excel->getActiveSheet()->getStyle('A' . $numrow)->applyFromArray($style_row);
@@ -153,9 +144,6 @@ class laporan extends CI_Controller
             $excel->getActiveSheet()->getStyle('H' . $numrow)->applyFromArray($style_row);
             $excel->getActiveSheet()->getStyle('I' . $numrow)->applyFromArray($style_row);
             $excel->getActiveSheet()->getStyle('J' . $numrow)->applyFromArray($style_row);
-            $excel->getActiveSheet()->getStyle('K' . $numrow)->applyFromArray($style_row);
-            $excel->getActiveSheet()->getStyle('L' . $numrow)->applyFromArray($style_row);
-            $excel->getActiveSheet()->getStyle('M' . $numrow)->applyFromArray($style_row);
 
             $no++; // Tambah 1 setiap kali looping
             $numrow++; // Tambah 1 setiap kali looping
@@ -172,9 +160,6 @@ class laporan extends CI_Controller
         $excel->getActiveSheet()->getColumnDimension('H')->setWidth(30); // Set width kolom E
         $excel->getActiveSheet()->getColumnDimension('I')->setWidth(30); // Set width kolom E
         $excel->getActiveSheet()->getColumnDimension('J')->setWidth(30); // Set width kolom E
-        $excel->getActiveSheet()->getColumnDimension('K')->setWidth(30); // Set width kolom E
-        $excel->getActiveSheet()->getColumnDimension('L')->setWidth(30); // Set width kolom E
-        $excel->getActiveSheet()->getColumnDimension('M')->setWidth(30); // Set width kolom E
         // Set height semua kolom menjadi auto (mengikuti height isi dari kolommnya, jadi otomatis)
         $excel->getActiveSheet()->getDefaultRowDimension()->setRowHeight(-1);
 

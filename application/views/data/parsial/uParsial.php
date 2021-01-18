@@ -7,7 +7,7 @@
 
         <?= $this->session->flashdata('message'); ?>
 
-        <form action="<?= base_url('data/u_parsial/') . $parsial['id_parsial'];  ?>" method="post">
+        <form action="<?= base_url('data/u_parsial/') . $parsial['id_data_parsial'];  ?>" method="post">
             <!-- Card Header - Accordion -->
             <a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
                 <h6 class="m-0 font-weight-bold text-primary">Edit Data parsial</h6>
@@ -19,25 +19,15 @@
                         <div class="form-group col-md-6">
                             <label>No_Parsial</label>
                             <select id="no_parsial" name="no_parsial" class="form-control">
-                                <option value="<?= $parsial['no_parsial'] ?>">-Pilih parsial-</option>
-                                <option value="parsial1">parsial1</option>
-                                <option value="parsial2">parsial2</option>
-                                <option value="parsial3">parsial3</option>
-                                <option value="parsial4">parsial4</option>
-                                <option value="parsial5">parsial5</option>
-                                <option value="panen">panen</option>
+                                 <option value="<?= $parsial['id_parsial'] ?>"><?= $parsial['id_parsial'] ?></option>
                             </select>
                         </div>
                         <div class="form-group col-md-6">
                             <label>Kode Kolam</label>
                             <select id="kode_kolam" name="kode_kolam" class="form-control">
-                                <option value="value=" <?= $parsial['kode_kolam'] ?>"">-Pilih-</option>
-                                <?php foreach ($kolam as $a) : ?>
 
-                                    <option value="<?= $a['kode_kolam']; ?>"><?= $a['kode_kolam']; ?>
+                                <option value="<?= $parsial['id_master_kolam'] ?>"><?= $parsial['id_master_kolam'] ?></option>
 
-                                    </option>
-                                <?php endforeach ?>
                             </select>
                         </div>
                         <div class="form-group col-md-6">
@@ -76,16 +66,12 @@
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-12">
                             <label>Parsial (%)</label>
                             <input type="number" min="1" class="form-control" id="parsial" name="parsial" value="<?= $parsial['parsial'] ?>">
                             <?= form_error('parsial', '<small class="text-danger pl-3">', '</small>'); ?>
                         </div>
-                        <div class="form-group col-md-6">
-                            <label>Sisa Populasi</label>
-                            <input type="number" min="1" class="form-control" id="sisa_p" name="sisa_p" value="<?= $parsial['sisa_p'] ?>">
-                            <?= form_error('sisa_p', '<small class="text-danger pl-3">', '</small>'); ?>
-                        </div>
+                    
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">

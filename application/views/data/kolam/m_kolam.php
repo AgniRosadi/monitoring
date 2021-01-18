@@ -21,24 +21,15 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <?= form_error('kolam', '<div class="alert alert-danger" role="alert">', '</div>'); ?>
-                        <form action="<?= base_url('data/kolam'); ?>" method="post">
+                        <?= form_error('m_kolam', '<div class="alert alert-danger" role="alert">', '</div>'); ?>
+                        <form action="<?= base_url('data/m_kolam'); ?>" method="post">
                             <div class="collapse show" id="collapseCardExample">
                                 <div class="card-body">
                                     <div class="form-row">
-
                                         <div class="form-group col-md-12">
                                             <label>Kode Kolam</label>
-                                            <select id="kode_kolam" name="kode_kolam" class="form-control">
-                                                <?php
-                                                $query1 = $this->db->query("SELECT * FROM kolam where status_kolam = 'tidak dipakai'")->result();
-                                                foreach ($query1 as $k) { ?>
-
-                                                    <option value=" <?php echo $k->id_master_kolam ?>"><?php echo $k->kode_kolam  ?></option>
-                                                <?php
-                                                } ?>
-                                                <!--  <option>--pilih parsial---</option> -->
-                                            </select>
+                                            <input type="text" class="form-control" id="kode_kolam" name="kode_kolam" placeholder="Contoh kode Kolam a/b/c">
+                                            <?= form_error('kode_kolam', '<small class="text-danger pl-3">', '</small>'); ?>
                                         </div>
 
                                     </div>
@@ -48,22 +39,14 @@
                                             <input type="number" min="1" class="form-control" id="luas_kolam" name="luas_kolam">
                                             <?= form_error('luas_kolam', '<small class="text-danger pl-3">', '</small>'); ?>
                                         </div>
+
                                         <div class="form-group col-md-6">
-                                            <label>Tanggal Tebar</label>
-                                            <input type="date" class="form-control" id="tanggal" name="tanggal">
-                                            <?= form_error('tanggal', '<small class="text-danger pl-3">', '</small>'); ?>
-                                        </div>
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="form-group col-md-6">
-                                            <label>Asal Benur</label>
-                                            <input type="text" class="form-control" id="asal_b" name="asal_b">
-                                            <?= form_error('asal_b', '<small class="text-danger pl-3">', '</small>'); ?>
-                                        </div>
-                                        <div class="form-group col-md-6">
-                                            <label>Jumlah Tebar</label>
-                                            <input type="number" min="1" class="form-control" id="jumlah_tebar" name="jumlah_tebar">
-                                            <?= form_error('jumlah_tebar', '<small class="text-danger pl-3">', '</small>'); ?>
+                                            <label>Tipe Plastik</label>
+                                            <select id="tipe_p" name="tipe_p" class="form-control">
+                                                <option value="">-Tipe-</option>
+                                                <option value="mulsa">Mulsa</option>
+                                                <option value="hdpe">Hdpe</option>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -93,51 +76,51 @@
                                     <th>No</th>
                                     <th>Kode Kolam</th>
                                     <th>Luas Kolam(m2)</th>
-                                    <th>Tanggal Tebar</th>
-                                    <th>Asal Benur</th>
-                                    <th>Jumlah Tebar</th>
+                                    <th>Tipe Plastik</th>
+                                    <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php $i = 1; ?>
-                                <?php foreach ($kolamnya as $ko) :
+                                <?php $i = 1;
                                 ?>
+                                <?php foreach ($kolamtu as $s) : ?>
+
                                     <tr>
                                         <th scope="row"><?= $i; ?></th>
-                                        <td><?= $ko->kode_kolam; ?></td>
-                                        <td><?= $ko->luas_kolam; ?></td>
-                                        <td><?= $ko->tanggal; ?></td>
-                                        <td><?= $ko->asal_b; ?></td>
-                                        <td><?= $ko->jumlah_tebar; ?></td>
-                                        <td> <a href="" class="badge badge-success" data-toggle="modal" data-target="#newRoleModal1<?= $ko->id_master_kolam; ?>">edit<i class=”fa fa-trash”></i></a>
+                                        <td><?= $s->kode_kolam; ?></td>
+                                        <td><?= $s->luas_kolam; ?></td>
+                                        <td><?= $s->tipe_p; ?></td>
+                                        <td><?= $s->status_kolam ?></td>
+
+                                        <td>
+                                            <!-- <button type="button" style="height: auto;" class="btn btn-success" data-toggle="modal" data-target="#newRoleModal1"></i> Edit</button type="button" class="btn"> -->
+                                            <a href="" class="badge badge-success" data-toggle="modal" data-target="#newRoleModal1<?= $s->id_master_kolam; ?>">edit<i class=”fa fa-trash”></i></a>
+                                            <a href="<?= base_url('data/delete/') . $s->id_master_kolam;  ?>" class="badge badge-danger" data-confirm="Anda yakin akan menghapus data ini?">Hapus<i class=”fa fa-trash”></i></a>
                                         </td>
                                     </tr>
                                     <?php $i++ ?>
-                                    <div class="modal fade" id="newRoleModal1<?= $ko->id_master_kolam; ?>" tabindex="-1" role="dialog" aria-labelledby="newRoleModalLabel1<?= $ko->id_master_kolam; ?>" aria-hidden="true">
+                                    <div class="modal fade" id="newRoleModal1<?= $s->id_master_kolam; ?>" tabindex="-1" role="dialog" aria-labelledby="newRoleModalLabel1<?= $s->id_master_kolam; ?>" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="newRoleModalLabel1<?= $ko->id_master_kolam; ?>">Edit Data Kolam</h5>
+                                                    <h5 class="modal-title" id="newRoleModalLabel1<?= $s->id_master_kolam; ?>">Edit Data Kolam</h5>
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
                                                     </button>
                                                 </div>
                                                 <?php
-                                                $id = $ko->id_master_kolam;
-                                                $query1 = $this->db->query("SELECT * FROM data_kolam where id_master_kolam=$id")->row_array() ?>
+                                                $id = $s->id_master_kolam;
+                                                $query1 = $this->db->query("SELECT * FROM kolam where id_master_kolam=$id")->row_array() ?>
                                                 <?= form_error('edit_Mkolam', '<div class="alert alert-danger" role="alert">', '</div>'); ?>
-                                                <form action="<?= base_url('data/kolam'); ?>" method="post">
+                                                <form action="<?= base_url('data/edit_Mkolam/') . $query1['id_master_kolam']; ?> " method="post">
                                                     <div class="collapse show" id="collapseCardExample">
                                                         <div class="card-body">
                                                             <div class="form-row">
-
                                                                 <div class="form-group col-md-12">
                                                                     <label>Kode Kolam</label>
-                                                                    <select id="kode_kolam" name="kode_kolam" disabled="" class="form-control">
-                                                                        <option value="<?= $query1['kode_kolam'] ?>"><?= $query1['kode_kolam'] ?></option>
+                                                                    <input type="text" class="form-control" id="kode_kolam" name="kode_kolam" placeholder="Contoh kode Kolam a/b/c" value="<?= $query1['kode_kolam'] ?>">
 
-                                                                    </select>
                                                                 </div>
 
                                                             </div>
@@ -147,27 +130,19 @@
                                                                     <input type="number" min="1" class="form-control" id="luas_kolam" name="luas_kolam" value="<?= $query1['luas_kolam'] ?>">
                                                                     <?= form_error('luas_kolam', '<small class="text-danger pl-3">', '</small>'); ?>
                                                                 </div>
+
                                                                 <div class="form-group col-md-6">
-                                                                    <label>Tanggal Tebar</label>
-                                                                    <input type="date" class="form-control" id="tanggal" name="tanggal" value="<?= $query1['tanggal'] ?>">
-                                                                    <?= form_error('tanggal', '<small class="text-danger pl-3">', '</small>'); ?>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-row">
-                                                                <div class="form-group col-md-6">
-                                                                    <label>Asal Benur</label>
-                                                                    <input type="text" class="form-control" id="asal_b" name="asal_b" value="<?= $query1['asal_b'] ?>">
-                                                                    <?= form_error('asal_b', '<small class="text-danger pl-3">', '</small>'); ?>
-                                                                </div>
-                                                                <div class="form-group col-md-6">
-                                                                    <label>Jumlah Tebar</label>
-                                                                    <input type="number" min="1" class="form-control" id="jumlah_tebar" name="jumlah_tebar" value="<?= $query1['jumlah_tebar'] ?>">
-                                                                    <?= form_error('jumlah_tebar', '<small class="text-danger pl-3">', '</small>'); ?>
+                                                                    <label>Tipe Plastik</label>
+                                                                    <select id="tipe_p" name="tipe_p" class="form-control">
+                                                                        <option value="<?= $query1['tipe_p'] ?>"><?= $query1['tipe_p'] ?></option>
+                                                                        <option value="mulsa">Mulsa</option>
+                                                                        <option value="hdpe">Hdpe</option>
+                                                                    </select>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div class="card-footer">
-                                                            <button type="submit" class="btn btn-primary">Simpan</button>
+                                                            <button type="submit" class="btn btn-primary">Edit</button>
                                                         </div>
                                                     </div>
                                                 </form>
@@ -179,6 +154,7 @@
                         </table>
                     </div>
                 </div>
+
 
             </div>
         </div>

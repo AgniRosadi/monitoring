@@ -25,6 +25,23 @@ class data extends CI_Controller
         $this->load->view('templates/footer', $data);
     }
 
+    public function hitung(){
+        $data['title'] = 'Estimasi Populasi';
+        $data['user'] = $this->db->get_where('user', ['email' =>
+        $this->session->userdata('email')])->row_array();
+
+        $data['airnya'] = $this->db->get_where('data_air')->result_array();
+        $data['kolamnya']=   $this->db->query("SELECT * from kolam k join data_kolam d on k.id_master_kolam=d.id_master_kolam ")->result();
+     
+
+        $this->load->view('templates/header', $data);
+        $this->load->view('templates/sidebar', $data);
+        $this->load->view('templates/topbar', $data);
+        $this->load->view('data/hitung', $data);
+        $this->load->view('templates/footer');
+    }
+    
+
     public function form_air()
     {
         $data['title'] = 'Form Data Air';
@@ -153,6 +170,7 @@ class data extends CI_Controller
         } else {
             $kode_kolam =  $this->input->post('kode_kolam');
             $data = [
+
                 'kode_kolam' => $this->input->post('kode_kolam', true),
                 'luas_kolam' => $this->input->post('luas_kolam', true),
                 'tipe_p' => $this->input->post('tipe_p', true),
@@ -177,7 +195,8 @@ class data extends CI_Controller
         $data['title'] = 'Kelola Data Kolam';
         $data['user'] = $this->db->get_where('user', ['email' =>
         $this->session->userdata('email')])->row_array();
-        $data['kolamnya'] = $this->db->get_where('data_kolam')->result();
+       $data['kolamnya']=   $this->db->query("SELECT * from kolam k join data_kolam d on k.id_master_kolam=d.id_master_kolam ")->result();
+       
         $data['kolam'] = $this->db->get_where('kolam')->result();
 
         $this->form_validation->set_rules('kode_kolam', 'Kode Kolam', 'required|trim');
@@ -185,7 +204,6 @@ class data extends CI_Controller
         $this->form_validation->set_rules('tanggal', 'Tanggal Tebar', 'required|trim');
         $this->form_validation->set_rules('asal_b', 'Asal Benur', 'required|trim');
         $this->form_validation->set_rules('jumlah_tebar', 'Jumlah Tebar', 'required|trim');
-        $this->form_validation->set_rules('tipe_p', 'Tipe Pelastik', 'required|trim');
 
         if ($this->form_validation->run() == false) {
             $this->load->view('templates/header', $data);
@@ -198,21 +216,20 @@ class data extends CI_Controller
 
             $data =
                 [
-                    'kode_kolam' => $this->input->post('kode_kolam'),
+                    'id_master_kolam' => $this->input->post('kode_kolam'),
                     'luas_kolam' => $this->input->post('luas_kolam'),
                     'tanggal' => $this->input->post('tanggal'),
                     'asal_b' => $this->input->post('asal_b'),
                     'jumlah_tebar' => $this->input->post('jumlah_tebar'),
-                    'tipe_p' => $this->input->post('tipe_p')
                 ];
 
-                $query1 =  $this->db->insert('data_kolam',  $data);
+            $query1 =  $this->db->insert('data_kolam',  $data);
             if ($query1) {
                 $query2 = $this->db->query("UPDATE kolam set status_kolam = 'dipakai' where id_master_kolam = $k");
-                if($query2){
+                if ($query2) {
                     $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
                 Data berhasil di tambahkan! </div>');
-                redirect('data/kolam/kolam', $data);
+                    redirect('data/kolam/kolam', $data);
                 }
             } else {
                 $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
@@ -271,6 +288,28 @@ class data extends CI_Controller
         Data berhasil di hapus! </div>');
         redirect('data/kolam/kolam');
     }
+    public function edit_Mkolam($Mkolam_id)
+    {
+
+        $data['kolamtu'] = $this->db->get_where('kolam', ['id_master_kolam' => $Mkolam_id])->row_array();
+        $this->form_validation->set_rules('kode_kolam', 'Kode Kolam', 'required|trim');
+        $this->form_validation->set_rules('luas_kolam', 'Luas Kolam', 'required|trim');
+        $this->form_validation->set_rules('tipe_p', 'Tipe Pelastik', 'required|trim');
+
+
+        $data = [
+            'kode_kolam' => $this->input->post('kode_kolam', true),
+            'luas_kolam' => $this->input->post('luas_kolam', true),
+            'tipe_p' => $this->input->post('tipe_p', true),
+        ];
+        $this->db->where('id_master_kolam', $Mkolam_id);
+        $this->db->update('kolam', $data);
+
+        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert"> Data berhasil di Edit! </div>');
+        redirect('data/kolam/m_kolam', $data);
+    }
+
+
 
     public function sampling()
     {
@@ -304,7 +343,6 @@ class data extends CI_Controller
         $this->form_validation->set_rules('size', 'Size', 'required|trim');
         $this->form_validation->set_rules('adg', 'ADG', 'required|trim');
         $this->form_validation->set_rules('pakan', 'Pakan', 'required|trim');
-        $this->form_validation->set_rules('estimasi', 'Estimasi', 'required|trim');
         $this->form_validation->set_rules('ket', 'Keterangan', 'required|trim');
 
         if ($this->form_validation->run() == false) {
@@ -323,7 +361,6 @@ class data extends CI_Controller
                 'size' => $this->input->post('size', true),
                 'adg' => $this->input->post('adg', true),
                 'pakan' => $this->input->post('pakan', true),
-                'estimasi' => $this->input->post('estimasi', true),
                 'ket' => $this->input->post('ket', true),
             ];
 
@@ -447,10 +484,9 @@ class data extends CI_Controller
         $query2 = $this->db->query("SELECT * FROM data_parsial d join parsial p on p.id_parsial = d.id_parsial join kolam k on k.id_master_kolam = d.id_master_kolam where d.id_master_kolam = $id_kolam and d.id_siklus = $urut")->num_rows();
 
         if ($query2 <= 5) {
-             $query2 = $this->db->query("UPDATE kolam set status_kolam = 'tidak dipakai' where id_master_kolam = $id_kolam");
+            $query2 = $this->db->query("UPDATE kolam set status_kolam = 'tidak dipakai' where id_master_kolam = $id_kolam");
             $id_siklus = $urut;
-        }
-         else {
+        } else {
             $id_siklus = $urut + 1;
         }
 

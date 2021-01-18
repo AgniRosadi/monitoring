@@ -66,17 +66,14 @@
                             <input type="number" min="1" class="form-control" id="pakan" name="pakan" value="<?= $sampling['pakan']; ?>">
                             <?= form_error('pakan', '<small class="text-danger pl-3">', '</small>'); ?>
                         </div>
-                        <div class=" form-group col-md-6">
-                            <label>Estimasi</label>
-                            <input type="number" min="1" class="form-control" id="estimasi" name="estimasi" value="<?= $sampling['estimasi']; ?>">
-                            <?= form_error('estimasi', '<small class="text-danger pl-3">', '</small>'); ?>
-                        </div>
-                    </div>
-                    <div class=" form-group ">
+                  
+                    
+                    <div class=" form-group col-md-6">
                         <label>Keterangan</label>
                         <input type=" text" class="form-control" id="ket" name="ket" value="<?= $sampling['ket']; ?>">
                         <?= form_error('ket', '<small class="text-danger pl-3">', '</small>'); ?>
                     </div>
+                </div>
                 </div>
                 <div class=" card-footer">
                     <button type="submit" class="btn btn-primary">Edit</button>

@@ -10,7 +10,7 @@
                 <div class="card" style="border-color: blue;">
                     <div class="card-body form-group row">
                         <h4 class="card-title"><b><?= $title; ?></b></h4>
-                        <a href="<?= base_url('data/t_sampling') ?>" style="margin-left: auto;" class="btn btn-primary"><i class="fa fa-plus"></i> Tambah</a>
+                        <a href="<?= base_url('laporan/excel1'); ?>" class="btn btn-success" style="margin-left: auto;"><i class="fa fa-file-excel"></i> Export Excel</a>
                     </div>
                 </div>
             </div>
@@ -40,7 +40,6 @@
                                         <th>ADG</th>
                                         <th>Pakan (kg)</th>
                                         <th>Keterangan</th>
-                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -54,9 +53,7 @@
                                             <td><?= $s['adg']; ?></td>
                                             <td><?= $s['pakan']; ?></td>
                                             <td><?= $s['ket']; ?></td>
-                                            <td> <a href="<?= base_url('data/u_sampling/') . $s['id_sampling'];  ?>" class="badge badge-success">edit</a>
-                                                <a href="<?= base_url('data/d_sampling/') . $s['id_sampling'];  ?>" class="badge badge-danger" data-confirm="Anda yakin akan menghapus data ini?">delete</a>
-                                            </td>
+
                                         </tr>
                                     <?php endforeach ?>
 

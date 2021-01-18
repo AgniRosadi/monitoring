@@ -105,7 +105,7 @@
                                 </thead>
                                 <tbody>
                                     <?php $i = 1; ?>
-                                    <?php $ai = $this->db->query("SELECT * from data_kolam d join data_parsial p on p.id_kolam = d.id_kolam join parsial l on l.id_parsial = p.id_parsial")->result_array(); ?>
+                                    <?php $ai = $this->db->query("SELECT * from kolam d join data_parsial p on p.id_master_kolam = d.id_master_kolam join parsial l on l.id_parsial = p.id_parsial")->result_array(); ?>
                                     <?php foreach ($airnya as $ai) : ?>
 
                                         <tr>
